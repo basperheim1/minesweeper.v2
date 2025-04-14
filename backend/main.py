@@ -4,6 +4,10 @@ from minesweeper import MinesweeperSolver
 from pydantic import BaseModel
 from typing import List, Set
 from rule import Rule 
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
 
 
 class RuleData(BaseModel):
@@ -17,6 +21,15 @@ class SolverRequest(BaseModel):
     
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can limit this to your frontend URL in prod
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/")
 def get_frequenies(request: SolverRequest):
