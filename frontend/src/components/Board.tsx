@@ -758,7 +758,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
     // call the functions below, as it would replace the new board with the stale one 
     // from the previous round. Additionally, it is possible that we have seen a click 
     // more recent than the one that is resolving in this function, and in that case, we should
-    // not udpate the board with the stale "updatedBoard"
+    // not udpate the board with the stale "updatedBoard" 
     if (firstClickRef.current || localProbabilityUpdateRef != currentProbabilityUpdateRef.current) {
       // console.log("We reset the board")
       return true;
