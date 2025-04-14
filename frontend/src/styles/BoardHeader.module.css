@@ -1,0 +1,6 @@
+.emojiIcon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* or 'cover' for full fill */
+    display: block;
+  }

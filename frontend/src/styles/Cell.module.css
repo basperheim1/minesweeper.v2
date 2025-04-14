@@ -1,0 +1,82 @@
+.cell {
+  width: 25px;
+  height: 25px;
+  background: #c0c0c0;
+  box-shadow:
+    inset -2px -2px 0 #ffffff,
+    inset 2px 2px 0 #808080;
+  border: 1px solid #c0c0c0;
+  font-family: 'Courier New', monospace;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 25px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.cell:hover {
+  background: #d0d0d0;
+}
+
+.revealed {
+  background: #e0e0e0;
+  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #ffffff;
+  cursor: default;
+}
+
+.flagIcon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* or 'cover' for full fill */
+  display: block;
+}
+
+/* Numbered cells */
+.cell[data-count="1"] { color: #0000ff; }   /* Blue */
+.cell[data-count="2"] { color: #008000; }   /* Green */
+.cell[data-count="3"] { color: #ff0000; }   /* Red */
+.cell[data-count="4"] { color: #000080; }   /* Dark Blue */
+.cell[data-count="5"] { color: #800000; }   /* Maroon */
+.cell[data-count="6"] { color: #008080; }   /* Teal */
+.cell[data-count="7"] { color: #000000; }   /* Black */
+.cell[data-count="8"] { color: #808080; }   /* Gray */
+
+
+.mine {
+  width: 12px;
+  height: 12px;
+  background-color: black;
+  border-radius: 50%;
+  position: relative;
+  margin: auto;
+}
+
+/* Vertical spoke */
+.mine::before {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 18px;
+  background-color: black;
+  top: -3px;
+  left: 5px;
+}
+
+/* Horizontal spoke */
+.mine::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 2px;
+  background-color: black;
+  top: 5px;
+  left: -3px;
+}
+
+.mineIcon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* or 'cover' for full fill */
+  display: block;
+}

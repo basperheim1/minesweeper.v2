@@ -1,0 +1,8 @@
+.boardRow{
+    display: flex;
+    flex-direction: row;
+}
+  
+.board{
+display: grid;
+}
