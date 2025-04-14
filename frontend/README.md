@@ -41,5 +41,5 @@ Todo:
 - Fix await problem 
 - Get public domain name 
 - Figure out why it takes long (await?)
-- Fix issue with clicking when request takes too long 
+- Fix issue with clicking when request takes too long (w)
 - Kill computation if takes too long 
