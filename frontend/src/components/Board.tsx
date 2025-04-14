@@ -582,9 +582,10 @@ const Board = forwardRef<SolverHandle, BoardData>(({
     row: number,
     column: number,
     e: React.MouseEvent
-  ): Promise<boolean> => {
+  ): Promise<void> => {
     // console.log("Board clicked before: ", board)
 
+    if (gameOver) return;
 
     let updatedBoard: CellData[][];
     let clickedCell: CellData;
@@ -607,7 +608,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
       clickedCell = updatedBoard[row][column];
     }
 
-    if (gameOver) return false;
+    clickedCell.clicked = true;
     let numClickedCells: number = 0;
 
     // User is simply flagging a cell
@@ -622,16 +623,15 @@ const Board = forwardRef<SolverHandle, BoardData>(({
       // console.log("setting board: 559");
       setBoard(updatedBoard);
 
-      return false;
+      return;
     }
 
     // If the cell is flagged and they left click it, nothing should happen
-    if (e.button === 0 && clickedCell.flagged) return false;
+    if (e.button === 0 && clickedCell.flagged) return;
 
-    clickedCell.clicked = true;
 
     if (clickedCell.revealed) {
-      return false;
+      return;
     }
 
     // If the cell is a mine, end the game
@@ -642,7 +642,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
       setTimerActive(false);
       // setAISolving(false);
       AISolvingRef.current = false;
-      return true;
+      return;
     }
 
     currentProbabilityUpdateRef.current += 1
@@ -734,7 +734,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
       setTimerActive(false);
       // setAISolving(false);
       AISolvingRef.current = false;
-      return true;
+      return;
     }
 
     setUncoveredCellCount((x) => x + numClickedCells);
@@ -749,6 +749,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
         "Content-Type": "application/json",
       },
       body: JSON.stringify(requestData),
+      keepalive: true,
     });
 
     const frequencies = await response.json();
@@ -761,7 +762,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
     // not udpate the board with the stale "updatedBoard" 
     if (firstClickRef.current || localProbabilityUpdateRef != currentProbabilityUpdateRef.current) {
       // console.log("We reset the board")
-      return true;
+      return;
     }
 
     updateProbabilities(frequencies, updatedBoard, newCellsWithNoInformation);
@@ -769,191 +770,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
 
     // console.log("Board: ", updatedBoard)
 
-    return false;
-  };
-
-  const clickCellAI = async (row: number, column: number): Promise<boolean> => {
-
-    if (!AISolvingRef.current) {
-      return false;
-    }
-
-    if (gameOver) return true;
-
-    // console.log("first click ref: ", firstClickRef.current);
-
-    let updatedBoard: CellData[][];
-    let clickedCell: CellData;
-
-    // First click
-    if (firstClickRef.current) {
-      // console.log("FIRST CLICK FIRS TCLICK");
-      setTimerActive(true);
-      firstClickRef.current = false;
-
-      // console.log("525");
-
-      let freshBoard: CellData[][] = generateBoard(rows, columns);
-      freshBoard = addMines(freshBoard, mineCount, row, column);
-      freshBoard = countBoardAdjacentMinesAndCells(freshBoard);
-      updatedBoard = freshBoard;
-      clickedCell = updatedBoard[row][column];
-    } else {
-      updatedBoard = cloneBoard(board);
-      clickedCell = updatedBoard[row][column];
-    }
-
-    let numClickedCells: number = 0;
-    clickedCell.clicked = true;
-
-    if (clickedCell.revealed) {
-      return false;
-    }
-
-    // If the cell is a mine, end the game
-    if (clickedCell.isMine) {
-      setLost(true);
-      setGameOver(true);
-      revealAll(updatedBoard);
-      setTimerActive(false);
-      // setAISolving(false);
-      AISolvingRef.current = false;
-      return true;
-    }
-
-
-    currentProbabilityUpdateRef.current += 1; 
-    const localProbabilityUpdateRef = currentProbabilityUpdateRef.current;
-
-    let newCellsWithNoInformation = cellsWithNoInformation;
-
-    if (clickedCell.adjacentMineCount === 0) {
-      const stack: [number, number][] = [[row, column]];
-
-      while (stack.length > 0) {
-        const [r, c] = stack.pop()!;
-
-        const cell = updatedBoard[r][c];
-
-        if (cell.revealed) continue;
-
-        numClickedCells++;
-        newCellsWithNoInformation = updateAdjacentCells(
-          r,
-          c,
-          cell.isMine,
-          true,
-          cell.isDetermined,
-          updatedBoard,
-          newCellsWithNoInformation
-        );
-        cell.revealed = true;
-        cell.isDetermined = true;
-        cell.someInformation = true;
-        cell.probability = Number(cell.isMine);
-        cell.clicked = true;
-
-        if (cell.adjacentMineCount === 0) {
-          const deltas = [-1, 0, 1];
-
-          //Click all of the adjacent cells as well
-          for (const dr of deltas) {
-            for (const dc of deltas) {
-              const nr = r + dr;
-              const nc = c + dc;
-
-              // Check bounds
-              if (
-                nr >= 0 &&
-                nr < board.length &&
-                nc >= 0 &&
-                nc < board[0].length &&
-                (dr !== 0 || dc !== 0)
-              ) {
-                const neighbor: CellData = updatedBoard[nr][nc];
-                if (!neighbor.revealed) {
-                  stack.push([nr, nc]);
-                }
-              }
-            }
-          }
-        }
-      }
-    } else {
-      newCellsWithNoInformation = updateAdjacentCells(
-        row,
-        column,
-        clickedCell.isMine,
-        true,
-        clickedCell.isDetermined,
-        updatedBoard,
-        newCellsWithNoInformation
-      );
-
-      // Increment the number of uncovered cells
-      numClickedCells++;
-
-      clickedCell.revealed = true;
-      clickedCell.isDetermined = true;
-      clickedCell.someInformation = true;
-      clickedCell.probability = Number(clickedCell.isMine);
-    }
-
-    // console.log("setting board: 810");
-    setBoard(updatedBoard);
-    // console.log("Updated board: ", updatedBoard);
-
-    if (uncoveredCellCount + numClickedCells === safeCount) {
-      setLost(false);
-      setGameOver(true);
-      revealAll(updatedBoard);
-      revealFlags(updatedBoard);
-      setTimerActive(false);
-      // setAISolving(false);
-      AISolvingRef.current = false;
-
-      return true;
-    }
-
-    setUncoveredCellCount((x) => x + numClickedCells);
-    setCellsWithNoInformation(newCellsWithNoInformation);
-
-
-    // Although the board has been updated, it has not added the probabilities, something that we now need to do
-    const requestData: SolverRequest = generateRequest(updatedBoard);
-
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    });
-
-    const frequencies = await response.json();
-
-    // It is possible the user has reset the board, and therefore, the board has been 
-    // rest to one where no cells have ben clicked. In this case, we don't want to 
-    // call the functions below, as it would replace the new board with the stale one 
-    // from the previous round. Additionally, it is possible that we have seen a click 
-    // more recent than the one that is resolving in this function, and in that case, we should
-    // not udpate the board with the stale "updatedBoard"
-    if (firstClickRef.current || localProbabilityUpdateRef != currentProbabilityUpdateRef.current) {
-      // console.log("We reset the board")
-      return true;
-    }
-
-    // if (!compareBoards(updatedBoard)) return true;
-
-    // console.log("Ai solving ref: ", AISolvingRef.current);
-
-    updateProbabilities(frequencies, updatedBoard, newCellsWithNoInformation);
-    setDeterminedFirstProbability(true);
-
-    // console.log("Board: ", updatedBoard)
-
-
-    return false;
+    return;
   };
 
   const playGameAI = async () => {
@@ -972,7 +789,13 @@ const Board = forwardRef<SolverHandle, BoardData>(({
       [row, column] = getLowestProbabilityChoice();
     }
 
-    await clickCellAI(row, column);
+    // Need to simulate a button being pressed as there is no 
+    // "real" user input
+    const fakeButtonEvent = {
+      button: 0, // 0 = left click, 1 = middle, 2 = right
+    } as React.MouseEvent;
+
+    await clickCell(row, column, fakeButtonEvent)
 
     setKeepGoingAI((old) => old + 1);
     // await new Promise(resolve => setTimeout(resolve, 200));

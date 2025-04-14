@@ -7,6 +7,7 @@ import Settings from "./Settings";
 import HamburgerMenu from "./HamburgerMenu";
 import MinesweeperHeader from "./MinesweeperHeader";
 import { SolverHandle } from "../types/types";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 const Game = () => {
   const [restart, setRestart] = useState(0);
@@ -93,6 +94,27 @@ const Game = () => {
             />
           </div>
         </div>
+      </div>
+      {/* Bottom Right Social Links */}
+      <div className="fixed bottom-4 right-4 z-[10000] flex flex-col items-center gap-3">
+        <a
+          href="https://github.com/basperheim1"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 px-3 py-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-lg shadow transition-colors"
+        >
+          <FaGithub size={18} />
+          <span className="text-sm font-medium">GitHub</span>
+        </a>
+        <a
+          href="https://www.linkedin.com/in/ben-asperheim/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 px-3 py-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-lg shadow transition-colors"
+        >
+          <FaLinkedin size={18} />
+          <span className="text-sm font-medium">LinkedIn</span>
+        </a>
       </div>
     </div>
   );

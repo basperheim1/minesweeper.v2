@@ -37,9 +37,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 Todo:
 - ReadMe
-- Center board 
+- Center board (w)
 - Fix await problem 
 - Get public domain name 
 - Figure out why it takes long (await?)
 - Fix issue with clicking when request takes too long (w)
 - Kill computation if takes too long 
+- Add links (w)
