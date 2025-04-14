@@ -98,6 +98,9 @@ const Board = forwardRef<SolverHandle, BoardData>(({
   // For first click
   const firstClickRef = useRef<boolean>(true);
 
+  // Ref to keep board updates based on the probability results consistent 
+  const currentProbabilityUpdateRef = useRef<number>(0);
+
   // Whenver the parameter restart changes value then we will
   // call this function to regenerate state variables including
   // the board itself. Essentially, it sets the state back to
@@ -185,6 +188,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
     setKeepGoingAI(0);
     AISolvingRef.current = false;
     firstClickRef.current = true;
+    currentProbabilityUpdateRef.current = 0; 
     // setAISolving(false);
   };
 
@@ -641,6 +645,9 @@ const Board = forwardRef<SolverHandle, BoardData>(({
       return true;
     }
 
+    currentProbabilityUpdateRef.current += 1
+    const localProbabilityUpdateRef: number = currentProbabilityUpdateRef.current;
+
     let newCellsWithNoInformation = cellsWithNoInformation;
 
     if (clickedCell.adjacentMineCount === 0) {
@@ -731,6 +738,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
     }
 
     setUncoveredCellCount((x) => x + numClickedCells);
+    setCellsWithNoInformation(newCellsWithNoInformation);
 
     // Although the board has been updated, it has not added the probabilities, something that we now need to do
     const requestData: SolverRequest = generateRequest(updatedBoard);
@@ -746,16 +754,16 @@ const Board = forwardRef<SolverHandle, BoardData>(({
     const frequencies = await response.json();
 
     // It is possible the user has reset the board, and therefore, the board has been 
-    // rest to one where no cells have ben clicked. In this case, we don't want to 
+    // rest to one where no cells have ben clicked. In this case, we do not want to 
     // call the functions below, as it would replace the new board with the stale one 
-    // from the previous round. 
-    if (firstClickRef.current) {
+    // from the previous round. Additionally, it is possible that we have seen a click 
+    // more recent than the one that is resolving in this function, and in that case, we should
+    // not udpate the board with the stale "updatedBoard" 
+    if (firstClickRef.current || localProbabilityUpdateRef != currentProbabilityUpdateRef.current) {
       // console.log("We reset the board")
-      // console.log("WHAT THE FUCK WHAT THE FUCK");
       return true;
     }
 
-    setCellsWithNoInformation(newCellsWithNoInformation);
     updateProbabilities(frequencies, updatedBoard, newCellsWithNoInformation);
     setDeterminedFirstProbability(true);
 
@@ -812,6 +820,10 @@ const Board = forwardRef<SolverHandle, BoardData>(({
       AISolvingRef.current = false;
       return true;
     }
+
+
+    currentProbabilityUpdateRef.current += 1; 
+    const localProbabilityUpdateRef = currentProbabilityUpdateRef.current;
 
     let newCellsWithNoInformation = cellsWithNoInformation;
 
@@ -904,6 +916,8 @@ const Board = forwardRef<SolverHandle, BoardData>(({
     }
 
     setUncoveredCellCount((x) => x + numClickedCells);
+    setCellsWithNoInformation(newCellsWithNoInformation);
+
 
     // Although the board has been updated, it has not added the probabilities, something that we now need to do
     const requestData: SolverRequest = generateRequest(updatedBoard);
@@ -921,10 +935,11 @@ const Board = forwardRef<SolverHandle, BoardData>(({
     // It is possible the user has reset the board, and therefore, the board has been 
     // rest to one where no cells have ben clicked. In this case, we don't want to 
     // call the functions below, as it would replace the new board with the stale one 
-    // from the previous round. 
-    if (firstClickRef.current) {
+    // from the previous round. Additionally, it is possible that we have seen a click 
+    // more recent than the one that is resolving in this function, and in that case, we should
+    // not udpate the board with the stale "updatedBoard"
+    if (firstClickRef.current || localProbabilityUpdateRef != currentProbabilityUpdateRef.current) {
       // console.log("We reset the board")
-      // console.log("WHAT THE FUCK WHAT THE FUCK");
       return true;
     }
 
@@ -932,7 +947,6 @@ const Board = forwardRef<SolverHandle, BoardData>(({
 
     // console.log("Ai solving ref: ", AISolvingRef.current);
 
-    setCellsWithNoInformation(newCellsWithNoInformation);
     updateProbabilities(frequencies, updatedBoard, newCellsWithNoInformation);
     setDeterminedFirstProbability(true);
 
