@@ -35,7 +35,7 @@ const Game = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex">
+    <div className="relative min-h-screen flex items-center justify-center">
       {/* Hamburger Menu */}
       <div className="fixed top-4 left-4 z-[10000]">
         <HamburgerMenu onClick={() => setShowSettings(!showSettings)} />
