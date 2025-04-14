@@ -749,6 +749,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
         "Content-Type": "application/json",
       },
       body: JSON.stringify(requestData),
+      keepalive: true,
     });
 
     const frequencies = await response.json();
@@ -928,6 +929,7 @@ const Board = forwardRef<SolverHandle, BoardData>(({
         "Content-Type": "application/json",
       },
       body: JSON.stringify(requestData),
+      keepalive: true,
     });
 
     const frequencies = await response.json();
