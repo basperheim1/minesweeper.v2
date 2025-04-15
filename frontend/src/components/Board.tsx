@@ -593,6 +593,11 @@ const Board = forwardRef<SolverHandle, BoardData>(
 
       if (gameOver) return;
 
+      // The user can't flag a cell to start
+      if (e.button !== 0 && firstClickRef.current){
+        return;
+      }
+
       let updatedBoard: CellData[][];
       let clickedCell: CellData;
 

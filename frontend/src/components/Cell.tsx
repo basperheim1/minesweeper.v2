@@ -12,7 +12,7 @@ type CellProps = {
 const Cell = ({ cellData, onClick, determinedFirstProbability, showProbability, AISolving }: CellProps) => {
 
   const handleClick = (e: React.MouseEvent): void => {
-    console.log("CLICKED");
+    // console.log("CLICKED");
 
     if (cellData.revealed || AISolving) {
       return;
