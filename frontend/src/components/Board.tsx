@@ -644,6 +644,9 @@ const Board = forwardRef<SolverHandle, BoardData>(
         return;
       }
 
+      currentProbabilityUpdateRef.current += 1;
+
+
       // If the cell is a mine, end the game
       if (clickedCell.isMine) {
         setLost(true);
@@ -655,7 +658,6 @@ const Board = forwardRef<SolverHandle, BoardData>(
         return;
       }
 
-      currentProbabilityUpdateRef.current += 1;
       const localProbabilityUpdateRef: number =
         currentProbabilityUpdateRef.current;
 
