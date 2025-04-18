@@ -619,7 +619,6 @@ const Board = forwardRef<SolverHandle, BoardData>(
         clickedCell = updatedBoard[row][column];
       }
 
-      clickedCell.clicked = true;
       let numClickedCells: number = 0;
 
       // User is simply flagging a cell
@@ -644,7 +643,11 @@ const Board = forwardRef<SolverHandle, BoardData>(
         return;
       }
 
+      // This ref ensures that stale boards never overwrite new ones 
       currentProbabilityUpdateRef.current += 1;
+
+      clickedCell.clicked = true;
+
 
 
       // If the cell is a mine, end the game
