@@ -72,9 +72,9 @@ const Game = () => {
       </AnimatePresence>
 
       {/* Main Content */}
-      <div className="w-full overflow-x-auto flex justify-center">
-        <div className="min-w-[300px] max-w-full">
-          <div className="border-2 border-zinc-300 dark:border-zinc-700 p-4 rounded-xl shadow-md bg-white dark:bg-zinc-900 flex flex-col items-center gap-4">
+      <div className="flex-1 flex flex-col items-center justify-start p-6 gap-6 w-full z-0 relative">
+        <div className="w-full overflow-x-auto">
+          <div className="w-max mx-auto border-2 border-zinc-300 dark:border-zinc-700 p-4 rounded-xl shadow-md bg-white dark:bg-zinc-900 flex flex-col items-center gap-4">
             <Board
               rows={rows}
               columns={columns}
@@ -95,7 +95,6 @@ const Game = () => {
           </div>
         </div>
       </div>
-
       {/* Bottom Right Social Links */}
       <div className="fixed bottom-4 right-4 z-[10000] flex flex-col items-center gap-3">
         <a

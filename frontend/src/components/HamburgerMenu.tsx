@@ -15,7 +15,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onClick }) => {
       aria-label="Open Settings"
     >
       <span className="w-6 h-1 bg-[hsl(120,100%,30%)] transition-all group-hover:w-7" />
-      <span className="w-6 h-1 bg-[hsl(60,100%,70%)] transition-all group-hover:w-7" />
+      <span className="w-6 h-1 bg-[hsl(60,100%,70%)] transitaion-all group-hover:w-7" />
       <span className="w-6 h-1 bg-[hsl(0,100%,45%)] transition-all group-hover:w-7" />
     </button>
   );
