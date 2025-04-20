@@ -44,8 +44,8 @@ Solving Minesweeper is an NP-hard problem, resulting in every solution out there
 - Creating "Islands": When generating mine configurations, it is much more efficient to generate various local configurations than it is to generate one large configuration. This is because if we have two "islands" of information, i.e. groups of cells that are not adjacent to one another, then neither island will provide information about the other. This is because the valid configurations in one part of the board are independent of valid configurations in other parts of the board. Due to this fact, we prefer to generate local configurations instead of global configurations, as we can save lots of time by making only considering the former. If generating configurations for $I_1$ takes A time, and generating configurations for $I_2$ takes B time, the overall time to generate the combinations with local islands is A+B, however with a global configuration, this time explodes up to A*B. Therefore, we work with local configurations instead of global ones. 
 
 ## What Technologies Were Used? 
-- Frontend: TypeScript, React, Next.js, and Tailwind — deployed on Vercel
-- Backend: Python and FastAPI — deployed on Render
+Frontend: TypeScript, React, Next.js, and Tailwind — deployed on Vercel
+Backend: Python and FastAPI — deployed on Render
 
 ## Any Future Developments? 
 
