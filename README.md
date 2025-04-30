@@ -26,7 +26,7 @@ Rules:
 - [1, {'A', 'D', 'E'}]  
 - [2, {'B', 'C', 'F', 'G', 'H'}]
 
-Ultimately, after my algorithm is ran, JSON will be returned, representing the probability that each cell is a mine. In this case, that JSON object would look like this: {'A': 0.33, 'B': 0.33, 'C': 0.33, 'D': 0.4, 'C': 0.4, 'F': 0.4, 'G': 0.4, 'H': 0.4}. 
+Ultimately, after my algorithm is ran, JSON will be returned, representing the probability that each cell is a mine. In this case, that JSON object would look like this: {'A': 0.33, 'D': 0.33, 'E': 0.33, 'B': 0.4, 'C': 0.4, 'F': 0.4, 'G': 0.4, 'H': 0.4}. 
 
 Equipped with these rules, we can determine valid board configurations. We do this by generating mine configurations, and then checking to see if they adhere to every rule that has been generated so far. Although this is the general algorithm we use to determine our probabilities, with no optimizations, the world would freeze over before many expert boards could be solved. If you're interested to see this, you can admire my initial Minesweeper repo, which I created ~2 years ago, with next to no programming or software engineering skills. For example, if we simply generated every valid board configuration for an expert board, before the first click, we would have $𝑪(480, 99) \approx 5.60221 \times 10^{104}$ valid board configurations. You can see that checking if each and every one of these combinations adheres to the generated rules is not a sustainable strategy. 
 
