@@ -5,7 +5,12 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 
-const Settings: React.FC<SettingsData> = ({ rows, columns, mines, applySettings }) => {
+const Settings: React.FC<SettingsData> = ({
+  rows,
+  columns,
+  mines,
+  applySettings,
+}) => {
   // Store raw text inputs as strings for editing freedom
   const [rowInput, setRowInput] = useState(rows.toString());
   const [colInput, setColInput] = useState(columns.toString());
@@ -61,14 +66,26 @@ const Settings: React.FC<SettingsData> = ({ rows, columns, mines, applySettings 
         Game Settings
       </h2>
 
-      <div className="flex justify-center gap-4">
-        <Button variant="outline" className={"cursor-pointer"} onClick={() => applyPreset("beginner")}>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <Button
+          variant="outline"
+          className="cursor-pointer w-full sm:w-auto"
+          onClick={() => applyPreset("beginner")}
+        >
           Beginner
         </Button>
-        <Button variant="outline" className={"cursor-pointer"} onClick={() => applyPreset("intermediate")}>
+        <Button
+          variant="outline"
+          className="cursor-pointer w-full sm:w-auto"
+          onClick={() => applyPreset("intermediate")}
+        >
           Intermediate
         </Button>
-        <Button variant="outline" className={"cursor-pointer"} onClick={() => applyPreset("expert")}>
+        <Button
+          variant="outline"
+          className="cursor-pointer w-full sm:w-auto"
+          onClick={() => applyPreset("expert")}
+        >
           Expert
         </Button>
       </div>
@@ -137,7 +154,9 @@ const Settings: React.FC<SettingsData> = ({ rows, columns, mines, applySettings 
       <div className="space-y-1">
         <label
           className={`block text-sm font-medium ${
-            minesValid ? "text-zinc-700 dark:text-zinc-300" : "text-red-600 dark:text-red-400"
+            minesValid
+              ? "text-zinc-700 dark:text-zinc-300"
+              : "text-red-600 dark:text-red-400"
           }`}
         >
           Mines
@@ -164,7 +183,9 @@ const Settings: React.FC<SettingsData> = ({ rows, columns, mines, applySettings 
           />
         </div>
         {!minesValid && (
-          <p className="text-xs text-red-500">Must be valid and ≤ rows × columns - 1</p>
+          <p className="text-xs text-red-500">
+            Must be valid and ≤ rows × columns - 1
+          </p>
         )}
       </div>
 
