@@ -16,7 +16,7 @@ import BoardHeader from "./BoardHeader";
 import { request } from "http";
 
 const API_URL: string =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/";
+  process.env.NEXT_PUBLIC_API_URL ?? "https://minesweeper-v2.onrender.com";
 
 const generateBoard = (rows: number, columns: number): CellData[][] => {
   let board: CellData[][] = [];
@@ -86,7 +86,7 @@ const Board = forwardRef<SolverHandle, BoardData>(
       useState<boolean>(false);
 
     // State variables for win / loss
-    const [gameOver, setGameOver] = useState<boolean>(true);
+    const [gameOver, setGameOver] = useState<boolean>(false);
     const [lost, setLost] = useState<boolean>(false);
     const [time, setTime] = useState<number>(0);
     const [timerActive, setTimerActive] = useState<boolean>(false);
